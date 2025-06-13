@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+</head>
+<body>
+    <h2>{{ user.username }}'s Profile</h2>
+
+    {% if request.user != user %}
+    <div id="follow-button-wrapper"
+         hx-post="{% url 'follow_toggle' user.username %}"
+         hx-target="#follow-button-wrapper"
+         hx-swap="outerHTML">
+        {% include 'userfollow/follow_button.html' with target_user=user user_profile=request.user.profile %}
+    </div>
+    {% endif %}
+
+    <!-- Add CSRF handling for HTMX -->
+    <script>
+        document.body.addEventListener('htmx:configRequest', function(event) {
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        });
+    </script>
+</body>
+</html>

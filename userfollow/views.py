@@ -3,6 +3,28 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Notification
 
+# @login_required
+# def follow_toggle(request, username):
+#     target_user = get_object_or_404(User, username=username)
+#     user_profile = request.user.profile
+
+#     if target_user.profile in user_profile.follows.all():
+#         user_profile.follows.remove(target_user.profile)
+#     else:
+#         user_profile.follows.add(target_user.profile)
+        
+#         #Send notification
+#         Notification.objects.create(
+#             sender=request.user,
+#             recipient=target_user,
+#             message=f"{request.user.username} started following you."
+        
+#     )
+
+#     return redirect('profile_detail', username=username)
+
+
+#Trying the HTMX method
 @login_required
 def follow_toggle(request, username):
     target_user = get_object_or_404(User, username=username)
@@ -12,18 +34,14 @@ def follow_toggle(request, username):
         user_profile.follows.remove(target_user.profile)
     else:
         user_profile.follows.add(target_user.profile)
-        
-        #Send notification
-        Notification.objects.create(
-            sender=request.user,
-            recipient=target_user,
-            message=f"{request.user.username} started following you."
-        
-    )
 
-    return redirect('profile_detail', username=username)
+    # Return partial to update the follow button only
+    return render(request, 'userfollow/follow_button.html', {
+        'target_user': target_user,
+        'user_profile': user_profile
+    })
 
 
 def profile_detail(request, username):
     user = get_object_or_404(User, username=username)
-    return render(request, 'userfollow/profile_detail.html', {'user': user})
+    return render(request, 'userfollow/profile_detail2.html', {'user': user})

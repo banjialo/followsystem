@@ -1,0 +1,10 @@
+
+
+<form method="POST">
+    {% csrf_token %}
+    {% if target_user.profile in user_profile.follows.all %}
+        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded">Unfollow</button>
+    {% else %}
+        <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Follow</button>
+    {% endif %}
+</form>
