@@ -8,3 +8,14 @@ class Profile(models.Model):
     
     def __str__(self):
         return self.user.username
+    
+
+class Notification(models.Model):
+    sender = models.ForeignKey(User, related_name='sent_notifications', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, related_name='received_notifications', on_delete=models.CASCADE)
+    message = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Notification from {self.sender} to {self.recipient}"

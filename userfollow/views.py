@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from .models import Notification
 
 @login_required
 def follow_toggle(request, username):
@@ -11,6 +12,14 @@ def follow_toggle(request, username):
         user_profile.follows.remove(target_user.profile)
     else:
         user_profile.follows.add(target_user.profile)
+        
+        #Send notification
+        Notification.objects.create(
+            sender=request.user,
+            recipient=target_user,
+            message=f"{request.user.username} started following you."
+        
+    )
 
     return redirect('profile_detail', username=username)
 
