@@ -1,0 +1,12 @@
+<h2>{{ user.username }}'s Profile</h2>
+
+{% if request.user != user %}
+    <form method="POST" action="{% url 'follow_toggle' user.username %}">
+        {% csrf_token %}
+        {% if user.profile in request.user.profile.follows.all %}
+            <button type="submit">Unfollow</button>
+        {% else %}
+            <button type="submit">Follow</button>
+        {% endif %}
+    </form>
+{% endif %}
