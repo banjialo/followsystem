@@ -7,3 +7,5 @@ class UserfollowConfig(AppConfig):
     
     def ready(self):
         import userfollow.signals
+        
+# This ensures that the signals are imported when the app is ready.
